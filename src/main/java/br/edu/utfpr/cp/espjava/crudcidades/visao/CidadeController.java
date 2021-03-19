@@ -66,5 +66,20 @@ public class CidadeController {
 
             return "/crud";
     }
+
+    @PostMapping("/alterar")
+    public String alterar(
+        @RequestParam String nomeAtual, 
+        @RequestParam String estadoAtual,
+        Cidade cidade) {
+
+            cidades.removeIf(cidadeAtual -> 
+                    cidadeAtual.getNome().equals(nomeAtual) && 
+                    cidadeAtual.getEstado().equals(estadoAtual));
+
+            criar(cidade);
+
+            return "redirect:/";
+    }
 }
 
