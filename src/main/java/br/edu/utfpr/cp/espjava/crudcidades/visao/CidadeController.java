@@ -3,8 +3,11 @@ package br.edu.utfpr.cp.espjava.crudcidades.visao;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,9 +30,22 @@ public class CidadeController {
     }
 
     @PostMapping("/criar")
-    public String criar(Cidade cidade) {
+    public String criar(@Valid Cidade cidade, BindingResult validacao) {
 
-        cidades.add(cidade);
+        if (validacao.hasErrors()) {
+            validacao
+                .getFieldErrors()
+                .forEach(error -> 
+                        System.out.println(
+                            String.format("O atributo %s emitiu a seguinte mensagem %s", 
+                                error.getField(),
+                                error.getDefaultMessage()
+                            )
+                        )
+                );
+        } else {
+            cidades.add(cidade);
+        }
 
         return "redirect:/";
     }
@@ -77,7 +93,7 @@ public class CidadeController {
                     cidadeAtual.getNome().equals(nomeAtual) && 
                     cidadeAtual.getEstado().equals(estadoAtual));
 
-            criar(cidade);
+            criar(cidade, null);
 
             return "redirect:/";
     }
