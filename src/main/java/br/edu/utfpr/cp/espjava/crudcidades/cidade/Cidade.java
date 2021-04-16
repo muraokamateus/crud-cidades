@@ -1,4 +1,4 @@
-package br.edu.utfpr.cp.espjava.crudcidades.visao;
+package br.edu.utfpr.cp.espjava.crudcidades.cidade;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
