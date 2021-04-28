@@ -3,6 +3,7 @@ package br.edu.utfpr.cp.espjava.crudcidades;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,6 +23,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .withUser("anna")
                     .password(cifrador().encode("test123"))
                     .roles("admin");
+    }
+
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+            .csrf().disable()
+            .authorizeRequests()
+            .antMatchers("/").hasAnyRole("listar", "admin")
+			.antMatchers("/criar").hasRole("admin")
+			.antMatchers("/excluir").hasRole("admin")
+			.antMatchers("/preparaAlterar").hasRole("admin")
+			.antMatchers("/alterar").hasRole("admin")
+            .anyRequest().denyAll()
+            .and()
+            .formLogin().permitAll();
     }
 
     @Bean
