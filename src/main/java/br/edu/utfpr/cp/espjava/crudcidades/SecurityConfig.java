@@ -36,7 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/alterar").hasRole("admin")
             .anyRequest().denyAll()
             .and()
-            .formLogin().permitAll();
+            .formLogin()
+            .loginPage("/login.html").permitAll();
     }
 
     @Bean
