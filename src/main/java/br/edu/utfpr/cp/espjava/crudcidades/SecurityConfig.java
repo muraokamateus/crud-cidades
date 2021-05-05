@@ -15,31 +15,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                    .withUser("john")
-                    .password(cifrador().encode("test123"))
-                    .roles("listar")
-                        .and()
-                    .withUser("anna")
-                    .password(cifrador().encode("test123"))
-                    .roles("admin");
-    }
-
     protected void configure(HttpSecurity http) throws Exception {
         http
             .csrf().disable()
             .authorizeRequests()
-            .antMatchers("/").hasAnyRole("listar", "admin")
-			.antMatchers("/criar").hasRole("admin")
-			.antMatchers("/excluir").hasRole("admin")
-			.antMatchers("/preparaAlterar").hasRole("admin")
-			.antMatchers("/alterar").hasRole("admin")
+            .antMatchers("/").hasAnyAuthority("listar", "admin")
+            .antMatchers("/criar").hasAuthority("admin")
+            .antMatchers("/excluir").hasAuthority("admin")
+            .antMatchers("/preparaAlterar").hasAuthority("admin")
+            .antMatchers("/alterar").hasAuthority("admin")
             .anyRequest().denyAll()
-            .and()
+                .and()
             .formLogin()
-            .loginPage("/login.html").permitAll();
+            .loginPage("/login.html").permitAll()
+            .defaultSuccessUrl("/", false)
+                .and()
+            .logout().permitAll();
     }
 
     @Bean

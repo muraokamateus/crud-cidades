@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,7 +24,7 @@ public class Usuario implements Serializable, UserDetails {
     private String nome;
     private String senha;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> papeis;
     
     public Long getId() {
