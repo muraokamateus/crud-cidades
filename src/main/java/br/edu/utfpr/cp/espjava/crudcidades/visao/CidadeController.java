@@ -47,7 +47,15 @@ public class CidadeController {
                 
                 return ("/crud");
         } else {
-            cidades.add(cidade);
+
+		// Ajuste introduzido por Weber Claudio Francisco Nunes da Silva, na Turma Java Web XX
+            var cidadeAtual = cidades.stream().filter(umaCidade ->
+                umaCidade.getNome().equals(cidade.getNome()) &&
+                umaCidade.getEstado().equals(cidade.getEstado())).findAny();
+        
+            if(!(cidadeAtual.isPresent())){
+                cidades.add(cidade); 
+            }                 
         }
 
         return "redirect:/";
@@ -94,13 +102,16 @@ public class CidadeController {
         BindingResult validacao,
         Model memoria) {
 
-            cidades.removeIf(cidadeAtual -> 
-                    cidadeAtual.getNome().equals(nomeAtual) && 
-                    cidadeAtual.getEstado().equals(estadoAtual));
+		// Ajuste introduzido por Weber Claudio Francisco Nunes da Silva na Turma Java Web XX
 
-            criar(cidade, validacao, memoria);
-
-            return "redirect:/";
+            String desfecho = criar(cidade, validacao, memoria);
+        
+            if(desfecho.equals("redirect:/")){
+                cidades.removeIf(cidadeAtual ->
+                    cidadeAtual.getNome().equals(nomeAtual) &&
+                    cidadeAtual.getEstado().equals(estadoAtual));  
+            }       
+            return desfecho;
     }
 }
 
