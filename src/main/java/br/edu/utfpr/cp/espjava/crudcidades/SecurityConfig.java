@@ -42,8 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @EventListener(InteractiveAuthenticationSuccessEvent.class)
     public void printUsuarioAtual(InteractiveAuthenticationSuccessEvent event) {
 
-        var usuario = (Usuario) event.getAuthentication().getPrincipal();
+        var usuario = event.getAuthentication().getName();
 
-        System.out.println(usuario.getNome());
+        System.out.println(usuario);
     }
 }
