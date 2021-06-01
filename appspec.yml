@@ -5,5 +5,5 @@ files:
     destination: /home/ec2-user/
 hooks:
   ApplicationStart:
-    - location: /bin/sh runit.sh
+    - location: runit.sh
       timeout: 120
