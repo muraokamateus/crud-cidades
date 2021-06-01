@@ -1,0 +1,9 @@
+version: 0.0
+os: linux
+files:
+  - source: ./crud-cidades-0.0.1-SNAPSHOT.jar
+    destination: /home/ec2-user/
+hooks:
+  ApplicationStart:
+    - location: /bin/sh runit.sh
+      timeout: 120
