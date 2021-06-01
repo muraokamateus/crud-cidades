@@ -6,4 +6,4 @@ files:
 hooks:
   ApplicationStart:
     - location: runit.sh
-      timeout: 120
+      timeout: 300
