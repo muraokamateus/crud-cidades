@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,6 +24,10 @@ public class CidadeController {
 
     @GetMapping("/")
     public String listar(Model memoria) {
+
+        OidcUser user = (OidcUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        
+        System.out.println(user.getAttribute("email").toString());
 
         System.out.println(
         SecurityContextHolder.getContext().getAuthentication().getPrincipal()
