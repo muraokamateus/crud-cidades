@@ -23,20 +23,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .csrf()
-            .disable()
+            .csrf().disable()
             .authorizeRequests()
-                .antMatchers("/")
-                .hasAnyAuthority("listar", "admin")
-                .antMatchers("/criar").hasAuthority("admin")
-                .antMatchers("/excluir").hasAuthority("listar")
-                .antMatchers("/preparaAlterar").hasAuthority("admin")
-                .antMatchers("/alterar").hasAuthority("admin")
+                .antMatchers("/").hasAnyRole("listar", "admin")
+                .antMatchers("/criar", "/preparaAlterar", "/alterar").hasRole("admin")
+                .antMatchers("/excluir").hasRole("listar")
                 .anyRequest().denyAll()
             .and()
-            .oauth2Login(l -> {
-                    l.userInfoEndpoint().userAuthoritiesMapper(userAuthoritiesMapper());
-                }).logout().permitAll();
+            .oauth2Login()
+                .userInfoEndpoint()
+                .userAuthoritiesMapper(userAuthoritiesMapper());
     }
 
     @Bean
@@ -44,12 +40,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return (authorities) -> {
             Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
 
-            Optional<OidcUserAuthority> awsAuthority = (Optional<OidcUserAuthority>) authorities.stream()
-                    .filter(grantedAuthority -> "ROLE_USER".equals(grantedAuthority.getAuthority())).findFirst();
+            Optional<OidcUserAuthority> awsAuthority = 
+                            (Optional<OidcUserAuthority>) 
+                                    authorities
+                                        .stream()
+                                        .filter(grantedAuthority -> 
+                                                    "ROLE_USER".equals(grantedAuthority.getAuthority()))
+                                        .findFirst();
 
             if (awsAuthority.isPresent()) {
-                mappedAuthorities = ((JSONArray) awsAuthority.get().getAttributes().get("cognito:groups")).stream()
-                        .map(role -> new SimpleGrantedAuthority("" + role)).collect(Collectors.toSet());
+                mappedAuthorities = ((JSONArray) 
+                                        awsAuthority
+                                            .get()
+                                            .getAttributes()
+                                            .get("cognito:groups"))
+                                        .stream()
+                                        .map(role -> 
+                                                    new SimpleGrantedAuthority("ROLE_" + role))
+                                        .collect(Collectors.toSet());
             }
 
             return mappedAuthorities;

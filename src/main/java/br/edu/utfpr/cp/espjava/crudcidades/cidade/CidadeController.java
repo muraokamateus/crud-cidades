@@ -25,7 +25,7 @@ public class CidadeController {
     public String listar(Model memoria) {
 
         System.out.println(
-        SecurityContextHolder.getContext().getAuthentication().getName()
+        SecurityContextHolder.getContext().getAuthentication().getPrincipal()
         );
 
         memoria.addAttribute("listaCidades", repository
