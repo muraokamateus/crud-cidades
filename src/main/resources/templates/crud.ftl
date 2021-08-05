@@ -57,9 +57,9 @@
             </div>
 
             <#if cidadeAtual??>
-                <button type="submit" class="btn btn-warning">CONCLUIR ALTERAÇÃO</button>
+                <button id="submit-alterar" type="submit" class="btn btn-warning">CONCLUIR ALTERAÇÃO</button>
             <#else>
-                <button type="submit" class="btn btn-primary">CRIAR</button>
+                <button id="submit-criar" type="submit" class="btn btn-primary">CRIAR</button>
             </#if>
             
         </form>
