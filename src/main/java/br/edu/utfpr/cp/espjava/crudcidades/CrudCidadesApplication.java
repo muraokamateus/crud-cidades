@@ -18,9 +18,17 @@ public class CrudCidadesApplication {
     @Value("${server.port}")
     private String property;
 
+    @Value("${passwd}")
+    private String passwd;
+
+    @Value("${company}")
+    private String company;
+
     @EventListener(ApplicationReadyEvent.class)
     public void init() {
         System.out.println("Property value: " + this.property);
+        System.out.println("Passwd value: " + this.passwd);
+        System.out.println("The company is: " + this.company);
     }
 
 	public static void main(String[] args) {
