@@ -2,15 +2,26 @@ package br.edu.utfpr.cp.espjava.crudcidades;
 
 import javax.validation.Validator;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.EventListener;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @SpringBootApplication
 public class CrudCidadesApplication {
+
+    @Value("${server.port}")
+    private String property;
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void init() {
+        System.out.println("Property value: " + this.property);
+    }
 
 	public static void main(String[] args) {
 		SpringApplication.run(CrudCidadesApplication.class, args);
