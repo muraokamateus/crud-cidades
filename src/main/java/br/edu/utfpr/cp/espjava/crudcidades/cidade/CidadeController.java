@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,9 +16,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class CidadeController {
 
     private final CidadeRepository repository;
+    private final ApplicationEventPublisher publisher;
 
-    public CidadeController(CidadeRepository repository) {
+    public CidadeController(
+        CidadeRepository repository,
+        ApplicationEventPublisher publisher) {
+
         this.repository = repository;
+        this.publisher = publisher;
     }
 
     @GetMapping("/")
@@ -28,6 +34,9 @@ public class CidadeController {
                                                     .stream()
                                                     .map(Cidade::clonar)
                                                     .collect(Collectors.toList()));
+
+        var event = new LogEvent(this);
+        publisher.publishEvent(event);
 
         return "/crud";
     }
